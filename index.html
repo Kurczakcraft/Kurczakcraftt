@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KurczakCraft - Sklep Rang</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -16,7 +18,6 @@
     }
     header {
       background: rgba(0,0,0,0.7);
-      color: #fff;
       text-align: center;
       padding: 30px 20px;
     }
@@ -32,7 +33,7 @@
       background: rgba(0,0,0,0.6);
       border-radius: 10px;
     }
-    .product {
+    .product, .opinion {
       background: rgba(255,255,255,0.1);
       border: 1px solid #555;
       border-radius: 12px;
@@ -51,39 +52,6 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-    button:hover {
-      background: linear-gradient(45deg, #ffcc00, #ffa500);
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #222;
-      padding: 25px;
-      border-radius: 15px;
-      z-index: 999;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    }
-    .modal.active {
-      display: block;
-    }
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 998;
-    }
-    .overlay.active {
-      display: block;
-    }
     input, select, textarea {
       width: 100%;
       padding: 12px;
@@ -92,19 +60,6 @@
       border: none;
       font-size: 1em;
     }
-    .opinion {
-      margin-top: 40px;
-    }
-    .opinion-form button {
-      margin-top: 10px;
-    }
-    .opinion-list p {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 15px;
-      border-left: 4px solid orange;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
     footer {
       text-align: center;
       color: #ccc;
@@ -112,53 +67,23 @@
       margin-top: 40px;
     }
   </style>
-  <script>
-    function showModal() {
-      document.getElementById('overlay').classList.add('active');
-      document.getElementById('modalForm').classList.add('active');
-    }
-    function closeModal() {
-      document.getElementById('overlay').classList.remove('active');
-      document.getElementById('modalForm').classList.remove('active');
-    }
-    function addOpinion() {
-      const textarea = document.getElementById('newOpinion');
-      const opinionText = textarea.value.trim();
-      if (opinionText) {
-        const container = document.getElementById('opinionList');
-        const p = document.createElement('p');
-        p.textContent = opinionText;
-        container.appendChild(p);
-        textarea.value = '';
-      }
-    }
-  </script>
 </head>
 <body>
-  <div id="overlay" class="overlay" onclick="closeModal()"></div>
-
   <header>
     <h1><span class="orange">Kurczak</span><span class="white">Craft</span></h1>
   </header>
 
   <section>
     <div class="product">
-      <h2>Rangi VIP / SVIP / GVIP</h2>
-      <p>kity, dalsze rtp, kolorowe nicky</p>
-      <button onclick="showModal()">Kup Teraz</button>
-    </div>
-
-    <div class="modal" id="modalForm">
-      <h3>Zamów Rangę</h3>
-      <input type="text" placeholder="Nick Minecraft">
-      <input type="email" placeholder="Adres Email">
-      <select>
-        <option disabled selected>Wybierz rangę</option>
-        <option>VIP</option>
-        <option>SVIP</option>
-        <option>GVIP</option>
+      <h2>Wybierz rangę:</h2>
+      <select id="rank">
+        <option value="VIP">VIP – 10zł</option>
+        <option value="SVIP">SVIP – 25zł</option>
+        <option value="GVIP">GVIP – 50zł</option>
       </select>
-      <select>
+      <input type="text" id="nick" placeholder="Nick Minecraft">
+      <input type="email" id="email" placeholder="Adres Email">
+      <select id="payment">
         <option disabled selected>Wybierz metodę płatności</option>
         <option>PayPal</option>
         <option>Stripe</option>
@@ -167,22 +92,79 @@
         <option>SMS</option>
         <option>BLIK</option>
       </select>
-      <button>Zamów</button>
-      <button onclick="closeModal()">Zamknij</button>
+      <button onclick="sendOrder()">Kup Teraz</button>
     </div>
 
     <div class="opinion">
-      <h3>Opinie graczy</h3>
-      <div class="opinion-form">
-        <textarea id="newOpinion" placeholder="Twoja opinia..." rows="3"></textarea>
-        <button onclick="addOpinion()">Dodaj opinię</button>
-      </div>
-      <div class="opinion-list" id="opinionList"></div>
+      <h2>Dodaj swoją opinię:</h2>
+      <input type="text" id="opNick" placeholder="Twój nick">
+      <textarea id="opText" placeholder="Twoja opinia..."></textarea>
+      <button onclick="addOpinion()">Dodaj opinię</button>
+    </div>
+
+    <div class="opinion">
+      <h2>Opinie graczy:</h2>
+      <div id="opinions"></div>
     </div>
   </section>
 
   <footer>
     KurczakCraft &copy; 2025 – Wszelkie prawa zastrzeżone.
   </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjkWkuC43qRrYrYimohrWSF5r-ZR2-EhQ",
+      authDomain: "kurczakcraft-34cf6.firebaseapp.com",
+      projectId: "kurczakcraft-34cf6",
+      storageBucket: "kurczakcraft-34cf6.appspot.com",
+      messagingSenderId: "523073421401",
+      appId: "1:523073421401:web:14640c7431dd9e8cb27148",
+      measurementId: "G-H2G0L57J1Q"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function sendOrder() {
+      const nick = document.getElementById('nick').value;
+      const email = document.getElementById('email').value;
+      const rank = document.getElementById('rank').value;
+      const payment = document.getElementById('payment').value;
+      if (nick && email && rank && payment) {
+        db.collection("zamowienia").add({nick, email, rank, payment, timestamp: new Date()});
+        alert("Zamówienie wysłane!");
+      } else {
+        alert("Wypełnij wszystkie pola!");
+      }
+    }
+
+    function addOpinion() {
+      const nick = document.getElementById('opNick').value;
+      const text = document.getElementById('opText').value;
+      if (nick && text) {
+        db.collection("opinie").add({nick, text, timestamp: new Date()});
+        document.getElementById('opNick').value = '';
+        document.getElementById('opText').value = '';
+        loadOpinions();
+      } else {
+        alert("Uzupełnij nick i opinię!");
+      }
+    }
+
+    function loadOpinions() {
+      const container = document.getElementById('opinions');
+      container.innerHTML = '';
+      db.collection("opinie").orderBy("timestamp", "desc").get().then(snapshot => {
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const el = document.createElement('p');
+          el.innerHTML = `<strong>${data.nick}</strong>: ${data.text}`;
+          container.appendChild(el);
+        });
+      });
+    }
+
+    window.onload = loadOpinions;
+  </script>
 </body>
 </html>
