@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: url('https://cdn.pixabay.com/photo/2017/01/31/20/15/chicken-2024653_960_720.png') no-repeat center center fixed;
+      background: url('https://i.imgur.com/FeRih9S.png') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
       margin: 0;
@@ -84,7 +84,7 @@
     .overlay.active {
       display: block;
     }
-    input, select {
+    input, select, textarea {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -93,12 +93,16 @@
       font-size: 1em;
     }
     .opinion {
-      margin-top: 20px;
+      margin-top: 40px;
     }
-    .opinion p {
+    .opinion-form button {
+      margin-top: 10px;
+    }
+    .opinion-list p {
       background: #444;
       padding: 10px;
       border-radius: 5px;
+      margin-top: 10px;
     }
     .delete-btn {
       background: red;
@@ -127,6 +131,22 @@
     }
     function deleteOpinion(btn) {
       btn.parentElement.remove();
+    }
+    function addOpinion() {
+      const textarea = document.getElementById('newOpinion');
+      const opinionText = textarea.value.trim();
+      if (opinionText) {
+        const container = document.getElementById('opinionList');
+        const p = document.createElement('p');
+        p.textContent = opinionText;
+        const del = document.createElement('button');
+        del.textContent = 'Usuń';
+        del.className = 'delete-btn';
+        del.onclick = () => deleteOpinion(del);
+        p.appendChild(del);
+        container.appendChild(p);
+        textarea.value = '';
+      }
     }
   </script>
 </head>
@@ -207,10 +227,11 @@
 
     <div class="opinion">
       <h3>Opinie graczy</h3>
-      <textarea placeholder="Twoja opinia..." rows="3"></textarea>
-      <button>Dodaj opinię</button>
-      <p>Świetny serwer! <button class="delete-btn" onclick="deleteOpinion(this)">Usuń</button></p>
-      <p>Najlepszy sklep! <button class="delete-btn" onclick="deleteOpinion(this)">Usuń</button></p>
+      <div class="opinion-form">
+        <textarea id="newOpinion" placeholder="Twoja opinia..." rows="3"></textarea>
+        <button onclick="addOpinion()">Dodaj opinię</button>
+      </div>
+      <div class="opinion-list" id="opinionList"></div>
     </div>
   </section>
 
