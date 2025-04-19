@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KurczakCraft</title>
+  <title>KurczakCraft - Sklep Rang</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -16,7 +16,6 @@
     }
     header {
       background: rgba(0,0,0,0.7);
-      color: #fff;
       text-align: center;
       padding: 30px 20px;
     }
@@ -25,6 +24,7 @@
     }
     .orange { color: orange; }
     .white { color: white; }
+
     section {
       max-width: 1000px;
       margin: auto;
@@ -32,6 +32,7 @@
       background: rgba(0,0,0,0.6);
       border-radius: 10px;
     }
+
     .product {
       background: rgba(255,255,255,0.1);
       border: 1px solid #555;
@@ -40,6 +41,7 @@
       margin: 20px 0;
       backdrop-filter: blur(5px);
     }
+
     button {
       padding: 12px 20px;
       margin-top: 15px;
@@ -54,6 +56,7 @@
     button:hover {
       background: linear-gradient(45deg, #ffcc00, #ffa500);
     }
+
     .modal {
       display: none;
       position: fixed;
@@ -92,27 +95,30 @@
       border: none;
       font-size: 1em;
     }
+
     .opinion {
       margin-top: 40px;
     }
-    .opinion-form button {
-      margin-top: 10px;
-    }
-    .opinion-list p {
-      background: #444;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-    .delete-btn {
-      background: red;
+    .opinion-form textarea {
+      border: 1px solid #999;
+      background: rgba(255, 255, 255, 0.1);
       color: #fff;
-      border: none;
-      padding: 5px 10px;
-      margin-left: 10px;
-      cursor: pointer;
-      border-radius: 3px;
+      resize: none;
+      font-size: 1em;
+      backdrop-filter: blur(4px);
     }
+    .opinion-list {
+      margin-top: 20px;
+    }
+    .opinion-list .op {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border-left: 5px solid #ffa500;
+      color: #eee;
+    }
+
     footer {
       text-align: center;
       color: #ccc;
@@ -120,31 +126,27 @@
       margin-top: 40px;
     }
   </style>
+
   <script>
     function showModal(id) {
       document.getElementById('overlay').classList.add('active');
       document.getElementById(id).classList.add('active');
     }
+
     function closeModal(id) {
       document.getElementById('overlay').classList.remove('active');
       document.getElementById(id).classList.remove('active');
     }
-    function deleteOpinion(btn) {
-      btn.parentElement.remove();
-    }
+
     function addOpinion() {
       const textarea = document.getElementById('newOpinion');
       const opinionText = textarea.value.trim();
       if (opinionText) {
         const container = document.getElementById('opinionList');
-        const p = document.createElement('p');
-        p.textContent = opinionText;
-        const del = document.createElement('button');
-        del.textContent = 'Usuń';
-        del.className = 'delete-btn';
-        del.onclick = () => deleteOpinion(del);
-        p.appendChild(del);
-        container.appendChild(p);
+        const div = document.createElement('div');
+        div.className = 'op';
+        div.textContent = opinionText;
+        container.appendChild(div);
         textarea.value = '';
       }
     }
@@ -163,17 +165,20 @@
       <p>kit vip, dalsze rtp, nick: <span style="color:#FFD700;">żółty</span></p>
       <button onclick="showModal('modalVip')">Kup VIP</button>
     </div>
+
     <div class="product">
       <h2>SVIP – 25zł</h2>
       <p>kit svip, dalsze rtp, nick: <span style="color:#FFFF66;">jasnożółty</span></p>
       <button onclick="showModal('modalSvip')">Kup SVIP</button>
     </div>
+
     <div class="product">
       <h2>GVIP – 50zł</h2>
       <p>kit gvip, dalsze rtp, nick: <span style="color:#66CCFF;">jasnoniebieski</span></p>
       <button onclick="showModal('modalGvip')">Kup GVIP</button>
     </div>
 
+    <!-- MODALS -->
     <div class="modal" id="modalVip">
       <h3>Kup VIP</h3>
       <input type="text" placeholder="Nick Minecraft">
@@ -225,13 +230,16 @@
       <button onclick="closeModal('modalGvip')">Zamknij</button>
     </div>
 
+    <!-- OPINIE -->
     <div class="opinion">
       <h3>Opinie graczy</h3>
       <div class="opinion-form">
-        <textarea id="newOpinion" placeholder="Twoja opinia..." rows="3"></textarea>
+        <textarea id="newOpinion" placeholder="Napisz swoją opinię..." rows="3"></textarea>
         <button onclick="addOpinion()">Dodaj opinię</button>
       </div>
-      <div class="opinion-list" id="opinionList"></div>
+      <div class="opinion-list" id="opinionList">
+        <!-- Opinie będą się pojawiać tutaj -->
+      </div>
     </div>
   </section>
 
