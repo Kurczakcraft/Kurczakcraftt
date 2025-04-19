@@ -1,74 +1,98 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KurczakCraft - Serwer Anarchia FFA</title>
+  <title>KurczakCraft - Anarchia FFA</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #0c0c0c;
-      color: #f0f0f0;
+      background: #111;
+      color: #fff;
       margin: 0;
       padding: 0;
     }
     header {
       background: #ffcc00;
       color: #000;
-      padding: 20px;
       text-align: center;
+      padding: 30px 20px;
     }
     section {
-      padding: 30px;
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
+      padding: 30px;
     }
-    .ip-box {
+    .info-box {
       background: #222;
-      padding: 15px;
       border-radius: 10px;
-      text-align: center;
-      font-size: 20px;
+      padding: 20px;
       margin: 20px 0;
     }
-    a {
-      color: #ffcc00;
-      text-decoration: none;
+    .product {
+      background: #333;
+      border: 1px solid #555;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
     }
     footer {
       text-align: center;
-      font-size: 14px;
-      padding: 20px;
       color: #aaa;
+      padding: 30px;
+    }
+    input, textarea, button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #ffcc00;
+      color: #000;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>KurczakCraft</h1>
-    <p>Serwer Minecraft – Anarchia / Free For All</p>
+    <p>Serwer Minecraft – Anarchia FFA</p>
+    <p>🌐 IP: <strong>kurczakcraft.pl</strong> | 🎮 Wersja: <strong>1.18.2 - Najnowsza</strong></p>
   </header>
 
   <section>
-    <h2>🔥 O serwerze</h2>
-    <p>KurczakCraft to brutalna strefa wolności – pełna PvP, pułapek i chaosu. Nie ma zasad. Nie ma zabezpieczeń. Liczy się tylko siła.</p>
-
-    <div class="ip-box">
-      🎮 IP: <strong>mc.kurczakcraft.pl</strong><br />
-      🌐 Discord: <a href="https://discord.gg/kurczakcraft">discord.gg/kurczakcraft</a>
+    <h2>🗨️ Opinie</h2>
+    <div class="info-box">
+      <p>Napisz swoją opinię o serwerze:</p>
+      <textarea placeholder="Napisz swoją opinię..."></textarea>
+      <button>Wyślij opinię</button>
     </div>
 
-    <h2>⚔️ Co nas wyróżnia?</h2>
-    <ul>
-      <li>✅ Full PvP 24/7</li>
-      <li>✅ Brak zasad – wszystko dozwolone</li>
-      <li>✅ Grief, kradzież, pułapki – legalne</li>
-      <li>✅ Zero lagów, mocna maszyna</li>
-    </ul>
+    <h2>📸 Galeria zdjęć</h2>
+    <div class="info-box">
+      <p>Prześlij screeny z gry lub zobacz co inni wrzucili:</p>
+      <input type="file" />
+      <button>Wyślij zdjęcie</button>
+    </div>
 
-    <h2>📸 Galeria (wkrótce)</h2>
-    <p>Wkrótce wrzucimy screeny z największych bitew i baz!</p>
+    <h2>🛒 Sklep – Kup rangę</h2>
+    <div class="product">
+      <h3>VIP – 10zł</h3>
+      <p>Dostęp do /kit vip, kolorowy nick</p>
+      <button>Kup VIP</button>
+    </div>
+    <div class="product">
+      <h3>SVIP – 25zł</h3>
+      <p>Więcej kitów, dostęp do /fly, prywatny czat</p>
+      <button>Kup SVIP</button>
+    </div>
+    <div class="product">
+      <h3>GVIP – 50zł</h3>
+      <p>Wszystko z SVIP + dostęp do /god, /heal, /nick</p>
+      <button>Kup GVIP</button>
+    </div>
   </section>
 
   <footer>
