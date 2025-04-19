@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KurczakCraft - Anarchia FFA</title>
+  <title>KurczakCraft - Sklep Rang</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -23,80 +23,143 @@
       margin: auto;
       padding: 30px;
     }
-    .info-box {
+    .product, .opinion-box {
       background: #222;
+      border: 1px solid #444;
       border-radius: 10px;
       padding: 20px;
       margin: 20px 0;
     }
-    .product {
+    .product h3 {
+      margin-top: 0;
+    }
+    .vip { color: #FFD700; }
+    .svip { color: #FFFF66; }
+    .gvip { color: #66CCFF; }
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      background: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .form-popup {
+      display: none;
       background: #333;
       border: 1px solid #555;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px 0;
-    }
-    footer {
-      text-align: center;
-      color: #aaa;
-      padding: 30px;
-    }
-    input, textarea, button {
-      padding: 10px;
+      padding: 20px;
       margin-top: 10px;
+      border-radius: 10px;
+    }
+    input, textarea {
       width: 100%;
+      padding: 10px;
+      margin: 5px 0;
       border-radius: 5px;
       border: none;
     }
-    button {
-      background: #ffcc00;
-      color: #000;
-      cursor: pointer;
+    .payment-methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .payment-method {
+      background: #333;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #444;
+    }
+    footer {
+      text-align: center;
+      color: #888;
+      padding: 20px;
+      margin-top: 40px;
+      background: #1a1a1a;
     }
   </style>
+  <script>
+    function toggleForm(id) {
+      const form = document.getElementById(id);
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
 </head>
 <body>
   <header>
-    <h1>KurczakCraft</h1>
-    <p>Serwer Minecraft – Anarchia FFA</p>
-    <p>🌐 IP: <strong>kurczakcraft.pl</strong> | 🎮 Wersja: <strong>1.18.2 - Najnowsza</strong></p>
+    <h1>KurczakCraft - Sklep z Rangami</h1>
+    <p>Wersja: 1.18.2 - Najnowsza | IP: <strong>kurczakcraft.pl</strong></p>
   </header>
 
   <section>
-    <h2>🗨️ Opinie</h2>
-    <div class="info-box">
-      <p>Napisz swoją opinię o serwerze:</p>
+    <div class="product vip">
+      <h3>VIP – 10zł</h3>
+      <p>Dostęp do: <strong>kit vip</strong>, <strong>dalsze rtp</strong>, nick: <span style="color:#FFD700;">żółty</span></p>
+      <div class="payment-methods">
+        <div class="payment-method">PayPal</div>
+        <div class="payment-method">Stripe</div>
+        <div class="payment-method">Paysafecard</div>
+        <div class="payment-method">Karta</div>
+        <div class="payment-method">SMS</div>
+        <div class="payment-method">BLIK</div>
+      </div>
+      <button onclick="toggleForm('formVip')">Kup VIP</button>
+      <div class="form-popup" id="formVip">
+        <input type="text" placeholder="Nick Minecraft" />
+        <input type="email" placeholder="Adres e-mail" />
+        <button>Wyślij</button>
+      </div>
+    </div>
+
+    <div class="product svip">
+      <h3>SVIP – 25zł</h3>
+      <p>Dostęp do: <strong>kit svip</strong>, <strong>dalsze rtp</strong>, nick: <span style="color:#FFFF66;">jasnożółty</span></p>
+      <div class="payment-methods">
+        <div class="payment-method">PayPal</div>
+        <div class="payment-method">Stripe</div>
+        <div class="payment-method">Paysafecard</div>
+        <div class="payment-method">Karta</div>
+        <div class="payment-method">SMS</div>
+        <div class="payment-method">BLIK</div>
+      </div>
+      <button onclick="toggleForm('formSvip')">Kup SVIP</button>
+      <div class="form-popup" id="formSvip">
+        <input type="text" placeholder="Nick Minecraft" />
+        <input type="email" placeholder="Adres e-mail" />
+        <button>Wyślij</button>
+      </div>
+    </div>
+
+    <div class="product gvip">
+      <h3>GVIP – 50zł</h3>
+      <p>Dostęp do: <strong>kit gvip</strong>, <strong>dalsze rtp</strong>, nick: <span style="color:#66CCFF;">jasnoniebieski</span></p>
+      <div class="payment-methods">
+        <div class="payment-method">PayPal</div>
+        <div class="payment-method">Stripe</div>
+        <div class="payment-method">Paysafecard</div>
+        <div class="payment-method">Karta</div>
+        <div class="payment-method">SMS</div>
+        <div class="payment-method">BLIK</div>
+      </div>
+      <button onclick="toggleForm('formGvip')">Kup GVIP</button>
+      <div class="form-popup" id="formGvip">
+        <input type="text" placeholder="Nick Minecraft" />
+        <input type="email" placeholder="Adres e-mail" />
+        <button>Wyślij</button>
+      </div>
+    </div>
+
+    <div class="opinion-box">
+      <h3>Opinie graczy</h3>
       <textarea placeholder="Napisz swoją opinię..."></textarea>
       <button>Wyślij opinię</button>
-    </div>
-
-    <h2>📸 Galeria zdjęć</h2>
-    <div class="info-box">
-      <p>Prześlij screeny z gry lub zobacz co inni wrzucili:</p>
-      <input type="file" />
-      <button>Wyślij zdjęcie</button>
-    </div>
-
-    <h2>🛒 Sklep – Kup rangę</h2>
-    <div class="product">
-      <h3>VIP – 10zł</h3>
-      <p>Dostęp do /kit vip, kolorowy nick</p>
-      <button>Kup VIP</button>
-    </div>
-    <div class="product">
-      <h3>SVIP – 25zł</h3>
-      <p>Więcej kitów, dostęp do /fly, prywatny czat</p>
-      <button>Kup SVIP</button>
-    </div>
-    <div class="product">
-      <h3>GVIP – 50zł</h3>
-      <p>Wszystko z SVIP + dostęp do /god, /heal, /nick</p>
-      <button>Kup GVIP</button>
     </div>
   </section>
 
   <footer>
-    © 2025 KurczakCraft – Wszystkie prawa zarezerwowane.
+    &copy; 2025 KurczakCraft. Wszelkie prawa zastrzeżone.
   </footer>
 </body>
 </html>
