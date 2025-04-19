@@ -2,69 +2,56 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KurczakCraft - Sklep Rang</title>
+  <title>KurczakCraft</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <style>
     body {
+      margin: 0;
       font-family: 'Poppins', sans-serif;
       background: url('https://i.imgur.com/ATywzml.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
-      margin: 0;
-      padding: 0;
     }
     header {
-      background: rgba(0,0,0,0.7);
       text-align: center;
-      padding: 30px 20px;
+      padding: 40px 0;
+      background: rgba(0,0,0,0.7);
     }
-    header h1 {
+    h1 {
       font-size: 3em;
     }
     .orange { color: orange; }
     .white { color: white; }
-    section {
-      max-width: 1000px;
-      margin: auto;
+
+    .section {
+      max-width: 800px;
+      margin: 30px auto;
+      background: rgba(0,0,0,0.7);
       padding: 30px;
-      background: rgba(0,0,0,0.6);
-      border-radius: 10px;
+      border-radius: 15px;
     }
-    .product, .opinion {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid #555;
-      border-radius: 12px;
-      padding: 25px;
-      margin: 20px 0;
-      backdrop-filter: blur(5px);
-    }
-    button {
-      padding: 12px 20px;
-      margin-top: 15px;
-      background: linear-gradient(45deg, #ffa500, #ffcc00);
+    .button {
+      background: orange;
       color: #000;
+      padding: 12px 20px;
       border: none;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
     }
     input, select, textarea {
       width: 100%;
+      margin-top: 10px;
       padding: 12px;
-      margin: 10px 0;
       border-radius: 8px;
       border: none;
       font-size: 1em;
     }
-    footer {
-      text-align: center;
-      color: #ccc;
-      padding: 20px;
-      margin-top: 40px;
+    .opinion {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -73,98 +60,44 @@
     <h1><span class="orange">Kurczak</span><span class="white">Craft</span></h1>
   </header>
 
-  <section>
-    <div class="product">
-      <h2>Wybierz rangę:</h2>
-      <select id="rank">
-        <option value="VIP">VIP – 10zł</option>
-        <option value="SVIP">SVIP – 25zł</option>
-        <option value="GVIP">GVIP – 50zł</option>
-      </select>
-      <input type="text" id="nick" placeholder="Nick Minecraft">
-      <input type="email" id="email" placeholder="Adres Email">
-      <select id="payment">
-        <option disabled selected>Wybierz metodę płatności</option>
-        <option>PayPal</option>
-        <option>Stripe</option>
-        <option>Paysafecard</option>
-        <option>Karta</option>
-        <option>SMS</option>
-        <option>BLIK</option>
-      </select>
-      <button onclick="sendOrder()">Kup Teraz</button>
-    </div>
+  <div class="section">
+    <h2>Zamów rangę</h2>
+    <input id="nick" placeholder="Nick Minecraft">
+    <input id="email" type="email" placeholder="Email">
+    <select id="ranga">
+      <option disabled selected>Wybierz rangę</option>
+      <option>VIP</option>
+      <option>SVIP</option>
+      <option>GVIP</option>
+    </select>
+    <select id="metoda">
+      <option disabled selected>Wybierz metodę płatności</option>
+      <option>PayPal</option>
+      <option>Stripe</option>
+      <option>Paysafecard</option>
+      <option>Karta</option>
+      <option>SMS</option>
+      <option>BLIK</option>
+    </select>
+    <button class="button" onclick="handleZamow()">Kup teraz</button>
+  </div>
 
-    <div class="opinion">
-      <h2>Dodaj swoją opinię:</h2>
-      <input type="text" id="opNick" placeholder="Twój nick">
-      <textarea id="opText" placeholder="Twoja opinia..."></textarea>
-      <button onclick="addOpinion()">Dodaj opinię</button>
-    </div>
+  <div class="section">
+    <h2>Dodaj opinię</h2>
+    <input id="opNick" placeholder="Twój nick">
+    <textarea id="opTekst" placeholder="Twoja opinia..."></textarea>
+    <button class="button" onclick="handleOpinie()">Dodaj opinię</button>
+  </div>
 
-    <div class="opinion">
-      <h2>Opinie graczy:</h2>
-      <div id="opinions"></div>
-    </div>
-  </section>
+  <div class="section">
+    <h2>Opinie graczy</h2>
+    <div id="opinie"></div>
+  </div>
 
-  <footer>
-    KurczakCraft &copy; 2025 – Wszelkie prawa zastrzeżone.
+  <footer style="text-align:center; padding: 30px; color:#ccc">
+    KurczakCraft © 2025 – Wszelkie prawa zastrzeżone.
   </footer>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBjkWkuC43qRrYrYimohrWSF5r-ZR2-EhQ",
-      authDomain: "kurczakcraft-34cf6.firebaseapp.com",
-      projectId: "kurczakcraft-34cf6",
-      storageBucket: "kurczakcraft-34cf6.appspot.com",
-      messagingSenderId: "523073421401",
-      appId: "1:523073421401:web:14640c7431dd9e8cb27148",
-      measurementId: "G-H2G0L57J1Q"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    function sendOrder() {
-      const nick = document.getElementById('nick').value;
-      const email = document.getElementById('email').value;
-      const rank = document.getElementById('rank').value;
-      const payment = document.getElementById('payment').value;
-      if (nick && email && rank && payment) {
-        db.collection("zamowienia").add({nick, email, rank, payment, timestamp: new Date()});
-        alert("Zamówienie wysłane!");
-      } else {
-        alert("Wypełnij wszystkie pola!");
-      }
-    }
-
-    function addOpinion() {
-      const nick = document.getElementById('opNick').value;
-      const text = document.getElementById('opText').value;
-      if (nick && text) {
-        db.collection("opinie").add({nick, text, timestamp: new Date()});
-        document.getElementById('opNick').value = '';
-        document.getElementById('opText').value = '';
-        loadOpinions();
-      } else {
-        alert("Uzupełnij nick i opinię!");
-      }
-    }
-
-    function loadOpinions() {
-      const container = document.getElementById('opinions');
-      container.innerHTML = '';
-      db.collection("opinie").orderBy("timestamp", "desc").get().then(snapshot => {
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const el = document.createElement('p');
-          el.innerHTML = `<strong>${data.nick}</strong>: ${data.text}`;
-          container.appendChild(el);
-        });
-      });
-    }
-
-    window.onload = loadOpinions;
-  </script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
