@@ -2,50 +2,30 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KurczakCraft</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="overlay"></div>
-  <header>
-    <h1>KurczakCraft</h1>
-    <button id="buyBtn">Kup rangę</button>
-  </header>
-
-  <section id="opinieSection">
-    <h2>Opinie graczy</h2>
-    <div class="opinie-container" id="opinieContainer">
-      <!-- Opinie tutaj -->
+  <div class="background">
+    <h1>Witamy na KurczakCraft!</h1>
+    <button onclick="openPopup()">Kup rangę</button>
+    <div id="popup" class="popup">
+      <form id="rankForm">
+        <label>Nick: <input type="text" name="nick" /></label><br />
+        <label>Ranga:
+          <select name="ranga">
+            <option value="vip">VIP</option>
+            <option value="svip">SVIP</option>
+            <option value="gvip">G-VIP</option>
+          </select>
+        </label><br />
+        <label>Opinia: <textarea name="opinia"></textarea></label><br />
+        <button type="submit">Kup teraz</button>
+      </form>
     </div>
-  </section>
-
-  <div class="popup" id="popupForm">
-    <form id="orderForm">
-      <h2>Kup rangę</h2>
-      <label>Nick:</label><input type="text" id="nick" required />
-      <label>Ranga:</label>
-      <select id="ranga">
-        <option value="vip">VIP - dostęp do /kit vip</option>
-        <option value="svip">SVIP - latanie, więcej /home</option>
-        <option value="gvip">GVIP - wszystkie przywileje + bonusy</option>
-      </select>
-      <label>Metoda płatności:</label>
-      <select id="metoda">
-        <option value="blik">BLIK</option>
-        <option value="paypal">PayPal</option>
-      </select>
-      <button type="submit">Zapłać</button>
-    </form>
+    <div id="opinie"></div>
   </div>
-
-  <form id="opiniaForm">
-    <h2>Dodaj opinię</h2>
-    <input type="text" id="opiniaNick" placeholder="Twój nick" required />
-    <textarea id="opiniaText" placeholder="Twoja opinia" required></textarea>
-    <button type="submit">Dodaj opinię</button>
-  </form>
-
-  <script type="module" src="main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
