@@ -1,139 +1,67 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>KurczakCraft - Sklep & Opinie</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://js.stripe.com/v3/"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://i.imgur.com/ATywzml.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      padding: 30px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: rgba(0,0,0,0.75);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
-    }
-
-    h1, h2 {
-      text-align: center;
-    }
-
-    input, select, textarea, button {
-      width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 1em;
-    }
-
-    button {
-      background: linear-gradient(135deg, #ffa500, #ffd700);
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: linear-gradient(135deg, #ffd700, #ffa500);
-    }
-
-    .opinion-list p {
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 10px;
-      margin-top: 8px;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      margin: 30px 0;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KurczakCraft</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="main.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>🎉 KurczakCraft - Kup Rangę</h1>
-    <form id="payment-form">
-      <select id="product" required>
-        <option value="vip">VIP – 10zł</option>
-        <option value="svip">SVIP – 25zł</option>
-        <option value="gvip">GVIP – 50zł</option>
-      </select>
-      <input type="text" id="nick" placeholder="Nick Minecraft" required>
-      <input type="email" id="email" placeholder="Adres Email" required>
-      <button type="submit">🛒 Kup teraz</button>
-    </form>
+  <header>
+    <h1>KurczakCraft</h1>
+    <p>Oficjalna strona serwera Minecraft: <strong>kurczakcraft.pl</strong></p>
+  </header>
 
-    <hr>
+  <section class="rangi">
+    <h2>Rangi</h2>
+    <div class="ranga" id="vip">
+      <h3>VIP</h3>
+      <p class="opis">Dostęp do podstawowych komend i przywilejów.</p>
+      <button onclick="openForm('vip')">Kup teraz</button>
+    </div>
+    <div class="ranga" id="svip">
+      <h3>SVIP</h3>
+      <p class="opis">Więcej komend, większy wpływ na serwer.</p>
+      <button onclick="openForm('svip')">Kup teraz</button>
+    </div>
+    <div class="ranga" id="gvip">
+      <h3>GVIP</h3>
+      <p class="opis">Pełen pakiet możliwości na serwerze.</p>
+      <button onclick="openForm('gvip')">Kup teraz</button>
+    </div>
+  </section>
 
-    <h2>💬 Dodaj Opinię</h2>
-    <form id="opinion-form">
-      <input type="text" id="opinionNick" placeholder="Twój nick" required>
-      <textarea id="opinionText" placeholder="Napisz swoją opinię..." required></textarea>
-      <button type="submit">📨 Wyślij opinię</button>
-    </form>
+  <section class="opinie">
+    <h2>Opinie graczy</h2>
+    <div id="opinie-lista"></div>
+    <div class="nawigacja">
+      <button onclick="prevOpinion()">←</button>
+      <button onclick="nextOpinion()">→</button>
+    </div>
+  </section>
 
-    <div id="opinionList" class="opinion-list"></div>
+  <div id="popup-form" class="popup hidden">
+    <div class="popup-content">
+      <span class="close" onclick="closeForm()">&times;</span>
+      <h2>Kup rangę</h2>
+      <form id="zamowienie-form">
+        <input type="hidden" id="wybranaRanga" name="ranga" />
+        <label for="nick">Nick z Minecraft:</label>
+        <input type="text" id="nick" name="nick" required />
+        <label for="metoda">Metoda płatności:</label>
+        <select id="metoda" name="metoda">
+          <option value="blik">BLIK</option>
+          <option value="paypal">PayPal</option>
+        </select>
+        <button type="submit">Złóż zamówienie</button>
+      </form>
+    </div>
   </div>
 
-  <script>
-    const stripe = Stripe("pk_test_51RFiTNQMCe9L6Bplub3VIfUSalHy70LzbYK3z1TnWlDILzxpToya0D3jKiqUEDVN4fMW2BZsgZ2VhdMX4fpBGjJU00hUmdut7y");
-
-    document.getElementById("payment-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const response = await fetch("/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          product: document.getElementById("product").value,
-          nick: document.getElementById("nick").value,
-          email: document.getElementById("email").value
-        })
-      });
-      const session = await response.json();
-      await stripe.redirectToCheckout({ sessionId: session.id });
-    });
-
-    document.getElementById("opinion-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const nick = document.getElementById("opinionNick").value;
-      const text = document.getElementById("opinionText").value;
-      await fetch("/opinie", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nick, text })
-      });
-      document.getElementById("opinionNick").value = '';
-      document.getElementById("opinionText").value = '';
-      loadOpinions();
-    });
-
-    async function loadOpinions() {
-      const res = await fetch("/opinie");
-      const data = await res.json();
-      const list = document.getElementById("opinionList");
-      list.innerHTML = '';
-      data.forEach(op => {
-        const p = document.createElement("p");
-        p.textContent = `${op.nick}: ${op.text}`;
-        list.appendChild(p);
-      });
-    }
-
-    loadOpinions();
-  </script>
+  <footer>
+    <p>KurczakCraft &copy; 2025</p>
+  </footer>
 </body>
 </html>
