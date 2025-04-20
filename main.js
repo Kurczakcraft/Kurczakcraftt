@@ -1,8 +1,9 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyBjkWkuC43qRrYrYimohrWSF5r-ZR2-EhQ",
+  apiKey: "AIzaSyBjkWkuC43qRrYrYimohrWSF5r-ZR2-EhQ",
   authDomain: "kurczakcraft-34cf6.firebaseapp.com",
   projectId: "kurczakcraft-34cf6",
   storageBucket: "kurczakcraft-34cf6.appspot.com",
@@ -13,3 +14,47 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+window.openForm = (ranga) => {
+  document.getElementById('formPopup').style.display = 'flex';
+  document.getElementById('formRanga').innerText = ranga;
+};
+
+window.closeForm = () => {
+  document.getElementById('formPopup').style.display = 'none';
+};
+
+window.handleZamow = async () => {
+  const nick = document.getElementById('nick').value;
+  const email = document.getElementById('email').value;
+  const metoda = document.getElementById('metoda').value;
+  const ranga = document.getElementById('formRanga').innerText;
+
+  if (!nick || !email || !metoda) return alert("Wypełnij wszystkie pola!");
+
+  await addDoc(collection(db, "zamowienia"), { nick, email, metoda, ranga });
+  alert("Zamówienie złożone!");
+  closeForm();
+};
+
+window.handleOpinie = async () => {
+  const nick = document.getElementById('opNick').value;
+  const tekst = document.getElementById('opTekst').value;
+  if (!nick || !tekst) return alert("Wypełnij wszystkie pola!");
+
+  await addDoc(collection(db, "opinie"), { nick, tekst });
+  loadOpinie();
+};
+
+async function loadOpinie() {
+  const querySnapshot = await getDocs(collection(db, "opinie"));
+  const opinieList = document.getElementById("opinieList");
+  opinieList.innerHTML = "";
+  querySnapshot.forEach((doc) => {
+    const div = document.createElement("div");
+    div.className = "opinia";
+    div.innerHTML = `<strong>${doc.data().nick}:</strong> ${doc.data().tekst}`;
+    opinieList.appendChild(div);
+  });
+}
+loadOpinie();
