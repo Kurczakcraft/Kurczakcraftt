@@ -24,7 +24,7 @@
     .white { color: white; }
 
     .section {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 30px auto;
       background: rgba(0,0,0,0.7);
       padding: 30px;
@@ -53,6 +53,36 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
     }
+    .rangi {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .karta {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      width: 280px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .karta:hover {
+      transform: scale(1.05);
+    }
+    .vip { border-top: 5px solid #ffd700; }
+    .svip { border-top: 5px solid darkorange; }
+    .gvip { border-top: 5px solid #00ffff; }
+    .karta img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+    .popup-content {
+      padding: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -61,7 +91,37 @@
   </header>
 
   <div class="section">
-    <h2>Zamów rangę</h2>
+    <h2>Rangi do kupienia</h2>
+    <div class="rangi">
+      <div class="karta vip">
+        <img src="https://i.imgur.com/J2R46sP.png" alt="VIP">
+        <h3>VIP - 10zł</h3>
+        <div class="popup-content">
+          ✔ Kolorowy nick<br/>
+          ✔ Dodatkowe komendy<br/>
+          ✔ Prefix VIP<br/>
+        </div>
+      </div>
+      <div class="karta svip">
+        <img src="https://i.imgur.com/LW5jZPE.png" alt="SVIP">
+        <h3>SVIP - 20zł</h3>
+        <div class="popup-content">
+          ✔ Wszystko z VIP<br/>
+          ✔ Więcej fly, /hat<br/>
+          ✔ Prefix SVIP<br/>
+        </div>
+      </div>
+      <div class="karta gvip">
+        <img src="https://i.imgur.com/EZDy9jZ.png" alt="GVIP">
+        <h3>GVIP - 30zł</h3>
+        <div class="popup-content">
+          ✔ Wszystko z SVIP<br/>
+          ✔ Dostęp do G-Kit<br/>
+          ✔ Prefix GVIP<br/>
+        </div>
+      </div>
+    </div>
+
     <input id="nick" placeholder="Nick Minecraft">
     <input id="email" type="email" placeholder="Email">
     <select id="ranga">
