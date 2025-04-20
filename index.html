@@ -1,41 +1,139 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KurczakCraft</title>
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background-image: url('https://i.imgur.com/ATywzml.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 1rem;
+    }
+
+    .rank-card {
+      background-color: #222;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px #000;
+      text-align: center;
+    }
+
+    .vip { background-color: #f9d342; }
+    .svip { background-color: #ff7f11; }
+    .gvip { background-color: #7de2fc; }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .opinie {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .opinia-card {
+      background-color: #111;
+      padding: 1rem;
+      border-radius: 1rem;
+      min-width: 250px;
+      box-shadow: 0 0 10px #ff7f11;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input, textarea, select {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-image"></div>
-  <main>
+
+  <header>
     <h1>KurczakCraft</h1>
-    <button id="buyButton">Kup teraz</button>
-    <div id="popup" class="popup hidden">
-      <form id="orderForm">
-        <h2>Zamów rangę</h2>
-        <label>Nick: <input type="text" name="nick" required /></label>
-        <label>Ranga:
-          <select name="rank">
-            <option value="VIP">VIP</option>
-            <option value="SVIP">SVIP</option>
-            <option value="GVIP">GVIP</option>
-          </select>
-        </label>
-        <label>Metoda płatności: <input type="text" name="payment" required /></label>
-        <button type="submit">Wyślij</button>
-      </form>
+    <p>Najlepszy serwer Minecraft w Polsce</p>
+  </header>
+
+  <div class="container">
+
+    <div class="rank-card vip">
+      <h2>VIP</h2>
+      <p>Podstawowa ranga z fajnymi dodatkami</p>
+      <button onclick="openForm('VIP')">Kup teraz</button>
     </div>
-    <section id="opinions">
-      <h2>Opinie graczy</h2>
-      <div id="opinie-list"></div>
-      <form id="opinionForm">
-        <input type="text" id="nick" placeholder="Nick" required />
-        <textarea id="text" placeholder="Twoja opinia" required></textarea>
-        <button type="submit">Dodaj opinię</button>
-      </form>
-    </section>
-  </main>
-  <script src="script.js"></script>
+
+    <div class="rank-card svip">
+      <h2>SVIP</h2>
+      <p>Więcej przywilejów niż VIP</p>
+      <button onclick="openForm('SVIP')">Kup teraz</button>
+    </div>
+
+    <div class="rank-card gvip">
+      <h2>GVIP</h2>
+      <p>Najwyższa ranga - pełen prestiż</p>
+      <button onclick="openForm('GVIP')">Kup teraz</button>
+    </div>
+
+    <h3>Opinie graczy</h3>
+    <div class="opinie" id="opinieList">
+      <!-- Opinie będą ładowane z Firebase -->
+    </div>
+
+    <h3>Dodaj opinię</h3>
+    <form id="opiniaForm">
+      <input type="text" id="nick" placeholder="Twój nick" required>
+      <textarea id="tekst" placeholder="Twoja opinia" required></textarea>
+      <button type="submit">Wyślij opinię</button>
+    </form>
+
+  </div>
+
+  <script>
+    function openForm(rank) {
+      alert('Otwórz formularz zakupu dla: ' + rank);
+    }
+
+    document.getElementById('opiniaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nick = document.getElementById('nick').value;
+      const tekst = document.getElementById('tekst').value;
+      // Zapisz do Firebase (kod dodamy później)
+      alert('Dziękujemy za opinię!');
+    });
+  </script>
 </body>
 </html>
