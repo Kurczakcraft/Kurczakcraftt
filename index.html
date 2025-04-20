@@ -1,1 +1,41 @@
-<!DOCTYPE html><html><head><title>KurczakCraft</title></head><body><h1>Witaj w KurczakCraft!</h1></body></html>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KurczakCraft</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-image"></div>
+  <main>
+    <h1>KurczakCraft</h1>
+    <button id="buyButton">Kup teraz</button>
+    <div id="popup" class="popup hidden">
+      <form id="orderForm">
+        <h2>Zamów rangę</h2>
+        <label>Nick: <input type="text" name="nick" required /></label>
+        <label>Ranga:
+          <select name="rank">
+            <option value="VIP">VIP</option>
+            <option value="SVIP">SVIP</option>
+            <option value="GVIP">GVIP</option>
+          </select>
+        </label>
+        <label>Metoda płatności: <input type="text" name="payment" required /></label>
+        <button type="submit">Wyślij</button>
+      </form>
+    </div>
+    <section id="opinions">
+      <h2>Opinie graczy</h2>
+      <div id="opinie-list"></div>
+      <form id="opinionForm">
+        <input type="text" id="nick" placeholder="Nick" required />
+        <textarea id="text" placeholder="Twoja opinia" required></textarea>
+        <button type="submit">Dodaj opinię</button>
+      </form>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
