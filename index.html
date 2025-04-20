@@ -1,139 +1,103 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>KurczakCraft</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Rubik', sans-serif;
-      background-image: url('https://i.imgur.com/ATywzml.jpg');
+      font-family: 'Poppins', sans-serif;
+      background: url('https://i.imgur.com/ATywzml.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      color: white;
+      color: #fff;
     }
-
     header {
       text-align: center;
-      padding: 2rem;
-      background-color: rgba(0, 0, 0, 0.6);
+      padding: 40px 0;
+      background: rgba(0,0,0,0.7);
     }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 2rem;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 1rem;
+    h1 {
+      font-size: 3em;
     }
+    .orange { color: orange; }
+    .white { color: white; }
 
-    .rank-card {
-      background-color: #222;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 10px #000;
-      text-align: center;
+    .section {
+      max-width: 800px;
+      margin: 30px auto;
+      background: rgba(0,0,0,0.7);
+      padding: 30px;
+      border-radius: 15px;
     }
-
-    .vip { background-color: #f9d342; }
-    .svip { background-color: #ff7f11; }
-    .gvip { background-color: #7de2fc; }
-
-    button {
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      background-color: black;
-      color: white;
+    .button {
+      background: orange;
+      color: #000;
+      padding: 12px 20px;
       border: none;
-      border-radius: 1rem;
+      border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
-      margin-top: 1rem;
     }
-
-    .opinie {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .opinia-card {
-      background-color: #111;
-      padding: 1rem;
-      border-radius: 1rem;
-      min-width: 250px;
-      box-shadow: 0 0 10px #ff7f11;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    input, textarea, select {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
+    input, select, textarea {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
       border: none;
+      font-size: 1em;
+    }
+    .opinion {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>KurczakCraft</h1>
-    <p>Najlepszy serwer Minecraft w Polsce</p>
+    <h1><span class="orange">Kurczak</span><span class="white">Craft</span></h1>
   </header>
 
-  <div class="container">
-
-    <div class="rank-card vip">
-      <h2>VIP</h2>
-      <p>Podstawowa ranga z fajnymi dodatkami</p>
-      <button onclick="openForm('VIP')">Kup teraz</button>
-    </div>
-
-    <div class="rank-card svip">
-      <h2>SVIP</h2>
-      <p>Więcej przywilejów niż VIP</p>
-      <button onclick="openForm('SVIP')">Kup teraz</button>
-    </div>
-
-    <div class="rank-card gvip">
-      <h2>GVIP</h2>
-      <p>Najwyższa ranga - pełen prestiż</p>
-      <button onclick="openForm('GVIP')">Kup teraz</button>
-    </div>
-
-    <h3>Opinie graczy</h3>
-    <div class="opinie" id="opinieList">
-      <!-- Opinie będą ładowane z Firebase -->
-    </div>
-
-    <h3>Dodaj opinię</h3>
-    <form id="opiniaForm">
-      <input type="text" id="nick" placeholder="Twój nick" required>
-      <textarea id="tekst" placeholder="Twoja opinia" required></textarea>
-      <button type="submit">Wyślij opinię</button>
-    </form>
-
+  <div class="section">
+    <h2>Zamów rangę</h2>
+    <input id="nick" placeholder="Nick Minecraft">
+    <input id="email" type="email" placeholder="Email">
+    <select id="ranga">
+      <option disabled selected>Wybierz rangę</option>
+      <option>VIP</option>
+      <option>SVIP</option>
+      <option>GVIP</option>
+    </select>
+    <select id="metoda">
+      <option disabled selected>Wybierz metodę płatności</option>
+      <option>PayPal</option>
+      <option>Stripe</option>
+      <option>Paysafecard</option>
+      <option>Karta</option>
+      <option>SMS</option>
+      <option>BLIK</option>
+    </select>
+    <button class="button" onclick="handleZamow()">Kup teraz</button>
   </div>
 
-  <script>
-    function openForm(rank) {
-      alert('Otwórz formularz zakupu dla: ' + rank);
-    }
+  <div class="section">
+    <h2>Dodaj opinię</h2>
+    <input id="opNick" placeholder="Twój nick">
+    <textarea id="opTekst" placeholder="Twoja opinia..."></textarea>
+    <button class="button" onclick="handleOpinie()">Dodaj opinię</button>
+  </div>
 
-    document.getElementById('opiniaForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nick = document.getElementById('nick').value;
-      const tekst = document.getElementById('tekst').value;
-      // Zapisz do Firebase (kod dodamy później)
-      alert('Dziękujemy za opinię!');
-    });
-  </script>
+  <div class="section">
+    <h2>Opinie graczy</h2>
+    <div id="opinie"></div>
+  </div>
+
+  <footer style="text-align:center; padding: 30px; color:#ccc">
+    KurczakCraft © 2025 – Wszelkie prawa zastrzeżone.
+  </footer>
+
+  <script type="module" src="main.js"></script>
 </body>
 </html>
