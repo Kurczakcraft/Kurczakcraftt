@@ -2,102 +2,138 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>KurczakCraft</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <title>KurczakCraft - Sklep & Opinie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: url('https://i.imgur.com/ATywzml.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #fff;
-    }
-    header {
-      text-align: center;
-      padding: 40px 0;
-      background: rgba(0,0,0,0.7);
-    }
-    h1 {
-      font-size: 3em;
-    }
-    .orange { color: orange; }
-    .white { color: white; }
-
-    .section {
-      max-width: 800px;
-      margin: 30px auto;
-      background: rgba(0,0,0,0.7);
+      color: white;
       padding: 30px;
-      border-radius: 15px;
     }
-    .button {
-      background: orange;
-      color: #000;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(0,0,0,0.75);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
-    input, select, textarea {
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    input, select, textarea, button {
       width: 100%;
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 10px;
       border: none;
       font-size: 1em;
     }
-    .opinion {
-      margin-top: 20px;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.1);
+
+    button {
+      background: linear-gradient(135deg, #ffa500, #ffd700);
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #ffd700, #ffa500);
+    }
+
+    .opinion-list p {
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
       border-radius: 10px;
+      margin-top: 8px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      margin: 30px 0;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1><span class="orange">Kurczak</span><span class="white">Craft</span></h1>
-  </header>
+  <div class="container">
+    <h1>🎉 KurczakCraft - Kup Rangę</h1>
+    <form id="payment-form">
+      <select id="product" required>
+        <option value="vip">VIP – 10zł</option>
+        <option value="svip">SVIP – 25zł</option>
+        <option value="gvip">GVIP – 50zł</option>
+      </select>
+      <input type="text" id="nick" placeholder="Nick Minecraft" required>
+      <input type="email" id="email" placeholder="Adres Email" required>
+      <button type="submit">🛒 Kup teraz</button>
+    </form>
 
-  <div class="section">
-    <h2>Zamów rangę</h2>
-    <input id="nick" placeholder="Nick Minecraft">
-    <input id="email" type="email" placeholder="Email">
-    <select id="ranga">
-      <option disabled selected>Wybierz rangę</option>
-      <option>VIP</option>
-      <option>SVIP</option>
-      <option>GVIP</option>
-    </select>
-    <select id="metoda">
-      <option disabled selected>Wybierz metodę płatności</option>
-      <option>PayPal</option>
-      <option>Stripe</option>
-      <option>Paysafecard</option>
-      <option>Karta</option>
-      <option>SMS</option>
-      <option>BLIK</option>
-    </select>
-    <button class="button" onclick="handleZamow()">Kup teraz</button>
+    <hr>
+
+    <h2>💬 Dodaj Opinię</h2>
+    <form id="opinion-form">
+      <input type="text" id="opinionNick" placeholder="Twój nick" required>
+      <textarea id="opinionText" placeholder="Napisz swoją opinię..." required></textarea>
+      <button type="submit">📨 Wyślij opinię</button>
+    </form>
+
+    <div id="opinionList" class="opinion-list"></div>
   </div>
 
-  <div class="section">
-    <h2>Dodaj opinię</h2>
-    <input id="opNick" placeholder="Twój nick">
-    <textarea id="opTekst" placeholder="Twoja opinia..."></textarea>
-    <button class="button" onclick="handleOpinie()">Dodaj opinię</button>
-  </div>
+  <script>
+    const stripe = Stripe("pk_test_51RFiTNQMCe9L6Bplub3VIfUSalHy70LzbYK3z1TnWlDILzxpToya0D3jKiqUEDVN4fMW2BZsgZ2VhdMX4fpBGjJU00hUmdut7y");
 
-  <div class="section">
-    <h2>Opinie graczy</h2>
-    <div id="opinie"></div>
-  </div>
+    document.getElementById("payment-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const response = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product: document.getElementById("product").value,
+          nick: document.getElementById("nick").value,
+          email: document.getElementById("email").value
+        })
+      });
+      const session = await response.json();
+      await stripe.redirectToCheckout({ sessionId: session.id });
+    });
 
-  <footer style="text-align:center; padding: 30px; color:#ccc">
-    KurczakCraft © 2025 – Wszelkie prawa zastrzeżone.
-  </footer>
+    document.getElementById("opinion-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nick = document.getElementById("opinionNick").value;
+      const text = document.getElementById("opinionText").value;
+      await fetch("/opinie", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nick, text })
+      });
+      document.getElementById("opinionNick").value = '';
+      document.getElementById("opinionText").value = '';
+      loadOpinions();
+    });
 
-  <script type="module" src="main.js"></script>
+    async function loadOpinions() {
+      const res = await fetch("/opinie");
+      const data = await res.json();
+      const list = document.getElementById("opinionList");
+      list.innerHTML = '';
+      data.forEach(op => {
+        const p = document.createElement("p");
+        p.textContent = `${op.nick}: ${op.text}`;
+        list.appendChild(p);
+      });
+    }
+
+    loadOpinions();
+  </script>
 </body>
 </html>
